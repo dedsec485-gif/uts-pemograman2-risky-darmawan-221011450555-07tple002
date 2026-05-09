@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Mahasiswa Baru</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #1a1a1a; font-size: 13px; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+
+    .header {
+      background: #1a3a6b;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header i { font-size: 26px; }
+    .header h1 { font-size: 17px; font-weight: 600; }
+    .header span { font-size: 12px; opacity: 0.75; }
+
+    .card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a3a6b;
+      border-bottom: 1.5px solid #1a3a6b;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .field input, .field select {
+      height: 34px;
+      padding: 0 10px;
+      border: 0.5px solid #ccc;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff;
+      color: #1a1a1a;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: #1a3a6b;
+      box-shadow: 0 0 0 3px rgba(26, 58, 107, 0.12);
+    }
+
+    .radio-row { display: flex; gap: 16px; align-items: center; height: 34px; }
+    .radio-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; font-weight: normal; text-transform: none; letter-spacing: 0; }
+
+    .kode-info {
+      font-size: 11px;
+      color: #555;
+      margin-top: 3px;
+      padding: 6px 8px;
+      background: #f5f7fa;
+      border-radius: 6px;
+      border-left: 2px solid #1a3a6b;
+    }
+
+    .avg-preview {
+      display: none;
+      padding: 8px 12px;
+      background: #f5f7fa;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-top: 10px;
+      border-left: 2px solid #1a3a6b;
+    }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-primary {
+      background: #1a3a6b;
+      color: #fff;
+      border: none;
+      padding: 9px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #0f2550; }
+    .btn-reset {
+      background: #f0f2f5;
+      color: #1a1a1a;
+      border: 0.5px solid #ccc;
+      padding: 9px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-reset:hover { background: #e2e5ea; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .scard { background: #f5f7fa; border-radius: 8px; padding: 12px 14px; text-align: center; }
+    .scard .num { font-size: 28px; font-weight: 600; color: #1a3a6b; }
+    .scard .num.lulus-num { color: #3B6D11; }
+    .scard .num.tidak-num { color: #A32D2D; }
+    .scard .lbl { font-size: 11px; color: #777; margin-top: 2px; }
+
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 900px; }
+    thead tr { background: #1a3a6b; color: #fff; }
+    thead th {
+      padding: 9px 6px;
+      text-align: center;
+      font-weight: 500;
+      border: 0.5px solid rgba(255,255,255,0.2);
+      white-space: nowrap;
+    }
+    tbody tr:nth-child(even) { background: #f9fafc; }
+    tbody tr:hover { background: #eef2f9; }
+    tbody td {
+      padding: 7px 6px;
+      text-align: center;
+      border: 0.5px solid #e8e8e8;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .lulus  { background: #EAF3DE; color: #3B6D11; }
+    .cadangan { background: #FAEEDA; color: #854F0B; }
+    .tidak  { background: #FCEBEB; color: #A32D2D; }
+
+    .del-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #A32D2D;
+      font-size: 15px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .del-btn:hover { background: #FCEBEB; }
+
+    .no-data { text-align: center; padding: 28px; color: #aaa; font-style: italic; }
+
+    .alert {
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .alert.show { display: block; }
+    .alert-err { background: #FCEBEB; color: #A32D2D; border: 0.5px solid #F7C1C1; }
+    .alert-ok  { background: #EAF3DE; color: #3B6D11; border: 0.5px solid #C0DD97; }
+
+    @media (max-width: 650px) {
+      .grid2, .grid3 { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <i class="ti ti-school" aria-hidden="true"></i>
+    <div>
+      <h1>Sistem Pendaftaran Mahasiswa Baru</h1>
+      <h1>BY RISKY DARMAWAN - 221011450555 - 07 TPLE 002 - UTS PEMOGRAMAN 2</h1>
+      <span>Input Data &amp; Rekap Pendaftaran</span>
+    </div>
+  </div>
+
+  <!-- FORM INPUT -->
+  <div class="card">
+    <div class="section-title">
+      <i class="ti ti-forms" aria-hidden="true"></i> Input Pendaftaran
+    </div>
+
+    <div id="alert-err" class="alert alert-err"></div>
+    <div id="alert-ok"  class="alert alert-ok"></div>
+
+    <!-- Baris 1: Kode & Nama -->
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="field">
+        <label>Kode Pendaftaran</label>
+        <input type="text" id="kode" placeholder="Contoh: A2-101-9" maxlength="20" oninput="parseKode()">
+        <div class="kode-info" id="kode-info">
+          2 karakter awal: tempat tes (A/B/V) &amp; gelombang &middot; 1 karakter akhir: bulan tes
+        </div>
+      </div>
+      <div class="field">
+        <label>Nama Pendaftar</label>
+        <input type="text" id="nama" placeholder="Nama lengkap">
+      </div>
+    </div>
+
+    <!-- Baris 2: JK & TTL -->
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="field">
+        <label>Jenis Kelamin</label>
+        <div class="radio-row">
+          <label><input type="radio" name="jk" value="L" checked> Laki-laki</label>
+          <label><input type="radio" name="jk" value="P"> Perempuan</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tempat, Tanggal Lahir</label>
+        <div style="display:flex; gap:6px">
+          <input type="text" id="tmpLahir" placeholder="Tempat lahir" style="flex:1">
+          <input type="date" id="tglLahir" style="flex:1">
+        </div>
+      </div>
+    </div>
+
+    <!-- Baris 3: Sekolah & Pekerjaan Ortu -->
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="field">
+        <label>Asal Sekolah</label>
+        <input type="text" id="sekolah" placeholder="Nama sekolah asal">
+      </div>
+      <div class="field">
+        <label>Pekerjaan Orang Tua</label>
+        <input type="text" id="pekOrtu" placeholder="Pekerjaan orang tua">
+      </div>
+    </div>
+
+    <!-- Nilai Tes -->
+    <div class="section-title">
+      <i class="ti ti-clipboard-list" aria-hidden="true"></i> Nilai Tes
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>Matematika</label>
+        <input type="number" id="mat" min="0" max="100" placeholder="0 – 100" oninput="calcAvg()">
+      </div>
+      <div class="field">
+        <label>Bahasa Inggris</label>
+        <input type="number" id="bing" min="0" max="100" placeholder="0 – 100" oninput="calcAvg()">
+      </div>
+      <div class="field">
+        <label>Pengetahuan Umum</label>
+        <input type="number" id="umum" min="0" max="100" placeholder="0 – 100" oninput="calcAvg()">
+      </div>
+    </div>
+
+    <div id="avg-preview" class="avg-preview"></div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="simpan()">
+        <i class="ti ti-device-floppy" aria-hidden="true"></i> Simpan
+      </button>
+      <button class="btn-reset" onclick="resetForm()">
+        <i class="ti ti-refresh" aria-hidden="true"></i> Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- TABEL DATA -->
+  <div class="card">
+    <div class="section-title">
+      <i class="ti ti-table" aria-hidden="true"></i> Tabel Data Pendaftaran
+    </div>
+
+    <!-- Ringkasan -->
+    <div class="summary-grid">
+      <div class="scard">
+        <div class="num" id="tot-daftar">0</div>
+        <div class="lbl">Jumlah Pendaftaran</div>
+      </div>
+      <div class="scard">
+        <div class="num lulus-num" id="tot-lulus">0</div>
+        <div class="lbl">Jumlah Peserta Lulus</div>
+      </div>
+      <div class="scard">
+        <div class="num tidak-num" id="tot-tidak">0</div>
+        <div class="lbl">Jumlah Tidak Lulus</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Kode Pendaftaran</th>
+            <th>Nama Pendaftar</th>
+            <th>Tmp. Lahir</th>
+            <th>JK</th>
+            <th>Tgl. Lahir</th>
+            <th>Pek. Ortu</th>
+            <th>Tempat Tes</th>
+            <th>Bln. Tes</th>
+            <th>MAT</th>
+            <th>B.ING</th>
+            <th>UMUM</th>
+            <th>Rata-rata</th>
+            <th>Keterangan</th>
+            <th>Hapus</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr>
+            <td colspan="15" class="no-data">Belum ada data pendaftaran.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+  /* ============================================================
+     DATA & KONSTANTA
+  ============================================================ */
+  let data = [];
+
+  const MAP_TEMPAT = { A: 'Gedung A', B: 'Gedung B', V: 'Viktor' };
+  const BULAN = [
+    '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
+
+  /* ============================================================
+     PARSE KODE PENDAFTARAN
+     - Karakter pertama (index 0) = kode gedung (A/B/V)
+     - Karakter terakhir           = bulan tes (1–9)
+  ============================================================ */
+  function parseKode() {
+    const k = document.getElementById('kode').value.trim().toUpperCase();
+    const info = document.getElementById('kode-info');
+    if (!k) {
+      info.textContent = '2 karakter awal: tempat tes (A/B/V) & gelombang · 1 karakter akhir: bulan tes';
+      return;
+    }
+    const first  = k[0];
+    const tempat = MAP_TEMPAT[first] || 'Tidak dikenal';
+    const last   = k[k.length - 1];
+    const bNum   = parseInt(last);
+    const bulan  = (!isNaN(bNum) && bNum >= 1 && bNum <= 9) ? BULAN[bNum] : '—';
+    info.textContent = `Tempat tes: ${tempat}   ·   Bulan tes: ${bulan}`;
+  }
+
+  /* ============================================================
+     PREVIEW RATA-RATA
+  ============================================================ */
+  function calcAvg() {
+    const m = parseFloat(document.getElementById('mat').value);
+    const b = parseFloat(document.getElementById('bing').value);
+    const u = parseFloat(document.getElementById('umum').value);
+    const prev = document.getElementById('avg-preview');
+    if (isNaN(m) || isNaN(b) || isNaN(u)) { prev.style.display = 'none'; return; }
+    const avg = (m + b + u) / 3;
+    const ket = getKet(avg);
+    prev.style.display = 'block';
+    prev.innerHTML = `Rata-rata: <strong>${avg.toFixed(1)}</strong> &nbsp;→&nbsp; Keterangan: <strong>${ket}</strong>`;
+  }
+
+  /* ============================================================
+     LOGIKA KETERANGAN
+     >= 70 → Lulus | 60–69 → Cadangan | < 60 → Tidak Lulus
+  ============================================================ */
+  function getKet(avg) {
+    if (avg >= 70) return 'Lulus';
+    if (avg >= 60) return 'Cadangan';
+    return 'Tidak Lulus';
+  }
+
+  /* ============================================================
+     TAMPILKAN ALERT SEMENTARA
+  ============================================================ */
+  function showAlert(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
+  }
+
+  /* ============================================================
+     SIMPAN DATA
+  ============================================================ */
+  function simpan() {
+    const kode    = document.getElementById('kode').value.trim();
+    const nama    = document.getElementById('nama').value.trim();
+    const tmpLahir = document.getElementById('tmpLahir').value.trim();
+    const tglLahir = document.getElementById('tglLahir').value;
+    const sekolah  = document.getElementById('sekolah').value.trim();
+    const pekOrtu  = document.getElementById('pekOrtu').value.trim();
+    const mat  = parseFloat(document.getElementById('mat').value);
+    const bing = parseFloat(document.getElementById('bing').value);
+    const umum = parseFloat(document.getElementById('umum').value);
+    const jk   = document.querySelector('input[name="jk"]:checked').value;
+
+    // Validasi wajib
+    if (!kode || !nama) {
+      showAlert('alert-err', 'Kode Pendaftaran dan Nama wajib diisi.');
+      return;
+    }
+    if (isNaN(mat) || isNaN(bing) || isNaN(umum)) {
+      showAlert('alert-err', 'Isi semua nilai tes (Matematika, B. Inggris, Pengetahuan Umum).');
+      return;
+    }
+    if (mat < 0 || mat > 100 || bing < 0 || bing > 100 || umum < 0 || umum > 100) {
+      showAlert('alert-err', 'Nilai harus antara 0 – 100.');
+      return;
+    }
+
+    // Parse kode
+    const k      = kode.toUpperCase();
+    const tempat = MAP_TEMPAT[k[0]] || '—';
+    const bNum   = parseInt(k[k.length - 1]);
+    const bulan  = (!isNaN(bNum) && bNum >= 1 && bNum <= 9) ? BULAN[bNum] : '—';
+
+    const avg = (mat + bing + umum) / 3;
+    const ket = getKet(avg);
+
+    data.push({ kode, nama, tmpLahir, tglLahir, sekolah, pekOrtu, jk, tempat, bulan, mat, bing, umum, avg, ket });
+
+    renderTable();
+    showAlert('alert-ok', `Data "${nama}" berhasil disimpan. Keterangan: ${ket}`);
+    resetForm();
+  }
+
+  /* ============================================================
+     HAPUS BARIS
+  ============================================================ */
+  function hapus(idx) {
+    if (!confirm('Hapus data ini?')) return;
+    data.splice(idx, 1);
+    renderTable();
+  }
+
+  /* ============================================================
+     RENDER TABEL + SUMMARY
+  ============================================================ */
+  function renderTable() {
+    const tb = document.getElementById('tbody');
+    if (data.length === 0) {
+      tb.innerHTML = '<tr><td colspan="15" class="no-data">Belum ada data pendaftaran.</td></tr>';
+      updateSummary();
+      return;
+    }
+    tb.innerHTML = data.map((d, i) => {
+      const cls = d.ket === 'Lulus' ? 'lulus' : d.ket === 'Cadangan' ? 'cadangan' : 'tidak';
+      const tgl = d.tglLahir
+        ? new Date(d.tglLahir).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' })
+        : '—';
+      return `<tr>
+        <td>${i + 1}</td>
+        <td><strong>${d.kode}</strong></td>
+        <td style="text-align:left; padding-left:8px">${d.nama}</td>
+        <td>${d.tmpLahir || '—'}</td>
+        <td>${d.jk}</td>
+        <td>${tgl}</td>
+        <td>${d.pekOrtu || '—'}</td>
+        <td>${d.tempat}</td>
+        <td>${d.bulan}</td>
+        <td>${d.mat}</td>
+        <td>${d.bing}</td>
+        <td>${d.umum}</td>
+        <td><strong>${d.avg.toFixed(1)}</strong></td>
+        <td><span class="badge ${cls}">${d.ket}</span></td>
+        <td>
+          <button class="del-btn" onclick="hapus(${i})" title="Hapus data">
+            <i class="ti ti-trash" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>`;
+    }).join('');
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const total  = data.length;
+    const lulus  = data.filter(d => d.ket === 'Lulus').length;
+    const tidak  = data.filter(d => d.ket === 'Tidak Lulus').length;
+    document.getElementById('tot-daftar').textContent = total;
+    document.getElementById('tot-lulus').textContent  = lulus;
+    document.getElementById('tot-tidak').textContent  = tidak;
+  }
+
+  /* ============================================================
+     RESET FORM
+  ============================================================ */
+  function resetForm() {
+    ['kode','nama','tmpLahir','tglLahir','sekolah','pekOrtu','mat','bing','umum']
+      .forEach(id => document.getElementById(id).value = '');
+    document.querySelector('input[name="jk"][value="L"]').checked = true;
+    document.getElementById('avg-preview').style.display = 'none';
+    document.getElementById('kode-info').textContent =
+      '2 karakter awal: tempat tes (A/B/V) & gelombang · 1 karakter akhir: bulan tes';
+  }
+</script>
+
+</body>
+</html>
